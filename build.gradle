@@ -12,6 +12,8 @@ buildscript {
         inject_version = '1'
         coroutines_version = '1.7.1'
         retrofit_version = '2.9.0'
+        paging_version = '3.3.0-alpha02'
+        coroutines_version = '1.7.1'
     }
 }
 

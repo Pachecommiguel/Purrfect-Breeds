@@ -1,31 +1,37 @@
 package com.pacheco.purrfectbreeds.ui.view
 
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.paging.LoadState
+import androidx.paging.PagingData
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.pacheco.purrfectbreeds.ui.event.HomeEvent
-import com.pacheco.purrfectbreeds.ui.state.HomeState
-import com.pacheco.purrfectbreeds.ui.state.StateResult
 import com.pacheco.purrfectbreeds.ui.viewmodel.BaseViewModel
 import com.pacheco.purrfectbreeds.ui.viewmodel.HomeViewModel
+import com.purrfectbreeds.model.ImageModel
 
 @Composable
 fun HomeView(
-    viewModel: BaseViewModel<HomeEvent> = hiltViewModel<HomeViewModel>(),
+    viewModel: BaseViewModel<HomeEvent, PagingData<ImageModel>> = hiltViewModel<HomeViewModel>(),
 ) {
-    val stateResult by viewModel.stateResult.collectAsState()
-
-    when(stateResult) {
-        StateResult.Loading -> {}
-        StateResult.Error -> TODO()
-        is StateResult.Success -> HomeLayout(
-            state = (stateResult as StateResult.Success).state as HomeState
-        )
-    }
+    val state = viewModel.state.collectAsLazyPagingItems()
+    HomeLayout(state = state)
 }
 
 @Composable
-private fun HomeLayout(state: HomeState) {
+private fun HomeLayout(state: LazyPagingItems<ImageModel>) {
+    LazyColumn {
+        items(state.itemCount) {
+            Text(text = state[it]!!.id)
+        }
 
+        when(state.loadState.refresh) {
+            LoadState.Loading -> {}
+            is LoadState.Error -> {}
+            is LoadState.NotLoading -> {}
+        }
+    }
 }

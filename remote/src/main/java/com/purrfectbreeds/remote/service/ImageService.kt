@@ -12,8 +12,9 @@ interface ImageService {
     @GET(Endpoints.IMAGE)
     @Headers("x-api-key:${RetrofitClient.API_KEY}")
     suspend fun getImages(
-        @Query("page") page: Int = 0,
+        @Query("page") page: Int,
+        @Query("order") order: String = "DESC",
         @Query("has_breeds") hasBreeds: Boolean = true,
-        @Query("limit") limit: Int = 25,
+        @Query("limit") limit: Int = 10,
     ): List<ImageDto>
 }

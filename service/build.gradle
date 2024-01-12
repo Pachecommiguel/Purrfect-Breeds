@@ -31,4 +31,10 @@ android {
 
 dependencies {
     implementation project(":model")
+
+    // Coroutines
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
+
+    // Paging
+    api "androidx.paging:paging-runtime:$paging_version"
 }

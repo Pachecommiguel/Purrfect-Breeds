@@ -2,10 +2,10 @@ package com.pacheco.purrfectbreeds.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
 import com.pacheco.purrfectbreeds.HiltApplication
 import com.pacheco.purrfectbreeds.ui.event.HomeEvent
-import com.pacheco.purrfectbreeds.ui.state.HomeState
-import com.pacheco.purrfectbreeds.ui.state.StateResult
+import com.purrfectbreeds.model.ImageModel
 import com.purrfectbreeds.usecase.GetImagesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
@@ -16,16 +16,18 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     getImagesUseCase: GetImagesUseCase
-) : ViewModel(), BaseViewModel<HomeEvent> {
+) : ViewModel(), BaseViewModel<HomeEvent, PagingData<ImageModel>> {
 
-    override val stateResult: MutableStateFlow<StateResult> = MutableStateFlow(StateResult.Loading)
+    override val state = MutableStateFlow<PagingData<ImageModel>>(value = PagingData.empty())
 
     init {
         viewModelScope.launch(context = CoroutineExceptionHandler { _, exception ->
             HiltApplication.isLoading = false
         }) {
-            stateResult.value = StateResult.Success(state = HomeState(images = getImagesUseCase()))
-            HiltApplication.isLoading = false
+            getImagesUseCase().collect {
+                state.value = it
+                HiltApplication.isLoading = false
+            }
         }
     }
 
