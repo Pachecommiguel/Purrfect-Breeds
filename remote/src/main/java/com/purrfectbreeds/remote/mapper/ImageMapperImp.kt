@@ -8,7 +8,13 @@ import javax.inject.Singleton
 @Singleton
 class ImageMapperImp @Inject constructor() : ImageMapper {
 
-    override fun toModel(dto: List<ImageDto>) = dto.filter { it.id != null }.map {
-        ImageModel(id = it.id!!)
-    }
+    override fun toModel(dto: List<ImageDto>) = dto
+        .filterNot { it.breeds?.firstOrNull()?.name.isNullOrBlank() }
+        .map {
+            ImageModel(
+                id = it.id ?: String(),
+                url = it.url ?: String(),
+                name = it.breeds!!.first().name!!
+            )
+        }
 }

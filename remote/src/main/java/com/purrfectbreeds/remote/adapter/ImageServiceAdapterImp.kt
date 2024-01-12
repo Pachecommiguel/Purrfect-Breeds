@@ -16,7 +16,7 @@ class ImageServiceAdapterImp @Inject constructor(
 ) : ImageServiceAdapter {
 
     override suspend fun getAll() = Pager(
-        config = PagingConfig(pageSize = 20, prefetchDistance = 20),
+        config = PagingConfig(pageSize = 30, prefetchDistance = 30),
         pagingSourceFactory = {
             ImagePagingSource(imageService = imageService, imageMapper = imageMapper)
         }

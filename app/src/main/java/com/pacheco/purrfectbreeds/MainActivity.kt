@@ -3,9 +3,12 @@ package com.pacheco.purrfectbreeds
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.pacheco.purrfectbreeds.router.ApplicationNavHost
 import com.pacheco.purrfectbreeds.ui.theme.PurrfectBreedsTheme
@@ -21,7 +24,9 @@ class MainActivity : ComponentActivity() {
         setContent {
             PurrfectBreedsTheme {
                 Surface(modifier = Modifier.fillMaxSize()) {
-                    ApplicationNavHost()
+                    Box(modifier = Modifier.padding(horizontal = 20.dp).padding(top = 20.dp)) {
+                        ApplicationNavHost()
+                    }
                 }
             }
         }

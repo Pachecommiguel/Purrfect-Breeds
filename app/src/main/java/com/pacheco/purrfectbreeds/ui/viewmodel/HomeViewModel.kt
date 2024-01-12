@@ -3,6 +3,7 @@ package com.pacheco.purrfectbreeds.ui.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.pacheco.purrfectbreeds.HiltApplication
 import com.pacheco.purrfectbreeds.ui.event.HomeEvent
 import com.purrfectbreeds.model.ImageModel
@@ -24,7 +25,7 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch(context = CoroutineExceptionHandler { _, exception ->
             HiltApplication.isLoading = false
         }) {
-            getImagesUseCase().collect {
+            getImagesUseCase().cachedIn(scope = this).collect {
                 state.value = it
                 HiltApplication.isLoading = false
             }
