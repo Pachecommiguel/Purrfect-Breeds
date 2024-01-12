@@ -1,0 +1,26 @@
+pluginManagement {
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+rootProject.name = "Purrfect Breeds"
+include ':app'
+include ':persistence'
+include ':model'
+include ':repository'
+include ':dao'
+include ':domain'
+include ':data'
+include ':usecase'
+include ':di'
+include ':service'
+include ':remote'
