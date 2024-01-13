@@ -18,4 +18,8 @@ class BreedDaoAdapterImp @Inject constructor(
             breedDao.insert(breed = it)
         }
     }
+
+    override suspend fun getBreeds(page: Int) = breedMapper.toModel(
+        entity = breedDao.getAll(offset = page * 10)
+    )
 }

@@ -11,4 +11,8 @@ class BreedEntityMapperImp @Inject constructor() : BreedEntityMapper {
     override fun toEntity(model: List<BreedModel>) = model.map {
         BreedEntity(id = it.id, name = it.name, url = it.url)
     }
+
+    override fun toModel(entity: List<BreedEntity>) = entity.map {
+        BreedModel(id = it.id, name = it.name, url = it.url)
+    }.sortedBy(BreedModel::name)
 }
