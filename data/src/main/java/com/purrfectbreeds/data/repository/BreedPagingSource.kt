@@ -2,11 +2,15 @@ package com.purrfectbreeds.data.repository
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
+import com.purrfectbreeds.dao.BreedDaoAdapter
 import com.purrfectbreeds.model.BreedModel
 import com.purrfectbreeds.service.BreedServiceAdapter
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 
 class BreedPagingSource(
-    private val breedServiceAdapter: BreedServiceAdapter
+    private val breedServiceAdapter: BreedServiceAdapter,
+    private val breedDaoAdapter: BreedDaoAdapter
 ) : PagingSource<Int, BreedModel>() {
 
     override fun getRefreshKey(state: PagingState<Int, BreedModel>) = state.anchorPosition
@@ -14,6 +18,12 @@ class BreedPagingSource(
     override suspend fun load(params: LoadParams<Int>) = try {
         val currentPage = params.key ?: 0
         val breeds = breedServiceAdapter.getBreeds(page = currentPage)
+
+        coroutineScope {
+            launch {
+                breedDaoAdapter.addBreeds(breeds = breeds)
+            }
+        }
 
         LoadResult.Page(
             data = breeds,

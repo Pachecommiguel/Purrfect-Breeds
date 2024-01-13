@@ -1,5 +1,7 @@
 package com.purrfectbreeds.di
 
+import com.purrfectbreeds.persistence.mapper.BreedEntityMapper
+import com.purrfectbreeds.persistence.mapper.BreedEntityMapperImp
 import com.purrfectbreeds.remote.mapper.BreedMapper
 import com.purrfectbreeds.remote.mapper.BreedMapperImp
 import dagger.Binds
@@ -15,4 +17,8 @@ abstract class MapperModule {
     @Singleton
     @Binds
     abstract fun bindBreedMapper(mapper: BreedMapperImp): BreedMapper
+
+    @Singleton
+    @Binds
+    abstract fun bindBreedEntityMapper(mapper: BreedEntityMapperImp): BreedEntityMapper
 }
