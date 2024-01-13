@@ -1,24 +1,22 @@
-package com.purrfectbreeds.remote
+package com.purrfectbreeds.data.repository
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.purrfectbreeds.model.BreedModel
-import com.purrfectbreeds.remote.mapper.BreedMapper
-import com.purrfectbreeds.remote.service.BreedService
+import com.purrfectbreeds.service.BreedServiceAdapter
 
 class BreedPagingSource(
-    private val breedService: BreedService,
-    private val breedMapper: BreedMapper
+    private val breedServiceAdapter: BreedServiceAdapter
 ) : PagingSource<Int, BreedModel>() {
 
     override fun getRefreshKey(state: PagingState<Int, BreedModel>) = state.anchorPosition
 
     override suspend fun load(params: LoadParams<Int>) = try {
         val currentPage = params.key ?: 0
-        val breeds = breedService.getBreeds(page = currentPage)
+        val breeds = breedServiceAdapter.getBreeds(page = currentPage)
 
         LoadResult.Page(
-            data = breedMapper.toModel(dto = breeds),
+            data = breeds,
             prevKey = when(currentPage == 0) {
                 true -> null
                 false -> currentPage.dec()

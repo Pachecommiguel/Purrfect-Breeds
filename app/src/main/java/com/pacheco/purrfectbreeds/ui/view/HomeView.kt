@@ -73,7 +73,7 @@ private fun HomeLayout(
 
             when(state.loadState.refresh) {
                 LoadState.Loading -> {}
-                is LoadState.Error -> {}
+                is LoadState.Error -> HiltApplication.isLoading = false
                 is LoadState.NotLoading -> HiltApplication.isLoading = false
             }
         }

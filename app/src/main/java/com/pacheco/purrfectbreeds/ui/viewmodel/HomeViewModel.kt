@@ -5,12 +5,10 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.filter
-import com.pacheco.purrfectbreeds.HiltApplication
 import com.pacheco.purrfectbreeds.ui.event.HomeEvent
 import com.purrfectbreeds.model.BreedModel
 import com.purrfectbreeds.usecase.GetBreedsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -24,9 +22,7 @@ class HomeViewModel @Inject constructor(
     private lateinit var data: PagingData<BreedModel>
 
     init {
-        viewModelScope.launch(context = CoroutineExceptionHandler { _, exception ->
-            HiltApplication.isLoading = false
-        }) {
+        viewModelScope.launch {
             getBreedsUseCase().cachedIn(scope = this).collect {
                 data = it
                 state.value = it
