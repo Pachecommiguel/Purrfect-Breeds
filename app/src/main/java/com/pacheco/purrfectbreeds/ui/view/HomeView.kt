@@ -18,6 +18,7 @@ import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.AsyncImage
+import com.pacheco.purrfectbreeds.HiltApplication
 import com.pacheco.purrfectbreeds.R
 import com.pacheco.purrfectbreeds.ui.component.Body
 import com.pacheco.purrfectbreeds.ui.component.Headline
@@ -73,7 +74,7 @@ private fun HomeLayout(
             when(state.loadState.refresh) {
                 LoadState.Loading -> {}
                 is LoadState.Error -> {}
-                is LoadState.NotLoading -> {}
+                is LoadState.NotLoading -> HiltApplication.isLoading = false
             }
         }
     }

@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import androidx.paging.filter
 import com.pacheco.purrfectbreeds.HiltApplication
 import com.pacheco.purrfectbreeds.ui.event.HomeEvent
 import com.purrfectbreeds.model.BreedModel
@@ -20,14 +21,15 @@ class HomeViewModel @Inject constructor(
 ) : ViewModel(), BaseViewModel<HomeEvent, PagingData<BreedModel>> {
 
     override val state = MutableStateFlow<PagingData<BreedModel>>(value = PagingData.empty())
+    private lateinit var data: PagingData<BreedModel>
 
     init {
         viewModelScope.launch(context = CoroutineExceptionHandler { _, exception ->
             HiltApplication.isLoading = false
         }) {
             getBreedsUseCase().cachedIn(scope = this).collect {
+                data = it
                 state.value = it
-                HiltApplication.isLoading = false
             }
         }
     }
@@ -39,6 +41,8 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun onSearchEvent(event: HomeEvent.Search) {
-
+        state.value = data.filter {
+            it.name.contains(other = event.name, ignoreCase = true)
+        }
     }
 }
