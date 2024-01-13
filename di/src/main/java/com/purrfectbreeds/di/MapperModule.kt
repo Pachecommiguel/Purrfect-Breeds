@@ -1,7 +1,7 @@
 package com.purrfectbreeds.di
 
-import com.purrfectbreeds.remote.mapper.ImageMapper
-import com.purrfectbreeds.remote.mapper.ImageMapperImp
+import com.purrfectbreeds.remote.mapper.BreedMapper
+import com.purrfectbreeds.remote.mapper.BreedMapperImp
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -14,5 +14,5 @@ abstract class MapperModule {
 
     @Singleton
     @Binds
-    abstract fun bindImageMapper(mapper: ImageMapperImp): ImageMapper
+    abstract fun bindBreedMapper(mapper: BreedMapperImp): BreedMapper
 }

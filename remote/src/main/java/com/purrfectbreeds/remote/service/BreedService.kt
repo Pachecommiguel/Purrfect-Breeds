@@ -2,19 +2,18 @@ package com.purrfectbreeds.remote.service
 
 import com.purrfectbreeds.remote.Endpoints
 import com.purrfectbreeds.remote.RetrofitClient
-import com.purrfectbreeds.remote.dto.ImageDto
+import com.purrfectbreeds.remote.dto.BreedDto
 import retrofit2.http.GET
 import retrofit2.http.Headers
 import retrofit2.http.Query
 
-interface ImageService {
+interface BreedService {
 
-    @GET(Endpoints.IMAGE)
+    @GET(Endpoints.BREED)
     @Headers("x-api-key:${RetrofitClient.API_KEY}")
-    suspend fun getImages(
+    suspend fun getBreeds(
         @Query("page") page: Int,
-        @Query("order") order: String = "DESC",
-        @Query("has_breeds") hasBreeds: Boolean = true,
+        @Query("order") order: String = "ASC",
         @Query("limit") limit: Int = 10,
-    ): List<ImageDto>
+    ): List<BreedDto>
 }

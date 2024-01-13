@@ -1,7 +1,7 @@
 package com.purrfectbreeds.di
 
-import com.purrfectbreeds.domain.GetImagesUseCaseImp
-import com.purrfectbreeds.usecase.GetImagesUseCase
+import com.purrfectbreeds.domain.GetBreedsUseCaseImp
+import com.purrfectbreeds.usecase.GetBreedsUseCase
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -14,5 +14,5 @@ abstract class UseCaseModule {
 
     @Singleton
     @Binds
-    abstract fun bindGetImagesUseCase(useCase: GetImagesUseCaseImp): GetImagesUseCase
+    abstract fun bindGetBreedsUseCase(useCase: GetBreedsUseCaseImp): GetBreedsUseCase
 }

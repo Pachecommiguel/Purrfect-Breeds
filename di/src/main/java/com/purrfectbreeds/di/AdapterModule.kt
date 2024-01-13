@@ -1,9 +1,7 @@
 package com.purrfectbreeds.di
 
-import com.purrfectbreeds.remote.adapter.ImageServiceAdapterImp
-import com.purrfectbreeds.remote.mapper.ImageMapper
-import com.purrfectbreeds.remote.mapper.ImageMapperImp
-import com.purrfectbreeds.service.ImageServiceAdapter
+import com.purrfectbreeds.remote.adapter.BreedServiceAdapterImp
+import com.purrfectbreeds.service.BreedServiceAdapter
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -16,5 +14,5 @@ abstract class AdapterModule {
 
     @Singleton
     @Binds
-    abstract fun bindImageServiceAdapter(adapter: ImageServiceAdapterImp): ImageServiceAdapter
+    abstract fun bindBreedServiceAdapter(adapter: BreedServiceAdapterImp): BreedServiceAdapter
 }

@@ -6,8 +6,8 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.pacheco.purrfectbreeds.HiltApplication
 import com.pacheco.purrfectbreeds.ui.event.HomeEvent
-import com.purrfectbreeds.model.ImageModel
-import com.purrfectbreeds.usecase.GetImagesUseCase
+import com.purrfectbreeds.model.BreedModel
+import com.purrfectbreeds.usecase.GetBreedsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,16 +16,16 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    getImagesUseCase: GetImagesUseCase
-) : ViewModel(), BaseViewModel<HomeEvent, PagingData<ImageModel>> {
+    getBreedsUseCase: GetBreedsUseCase
+) : ViewModel(), BaseViewModel<HomeEvent, PagingData<BreedModel>> {
 
-    override val state = MutableStateFlow<PagingData<ImageModel>>(value = PagingData.empty())
+    override val state = MutableStateFlow<PagingData<BreedModel>>(value = PagingData.empty())
 
     init {
         viewModelScope.launch(context = CoroutineExceptionHandler { _, exception ->
             HiltApplication.isLoading = false
         }) {
-            getImagesUseCase().cachedIn(scope = this).collect {
+            getBreedsUseCase().cachedIn(scope = this).collect {
                 state.value = it
                 HiltApplication.isLoading = false
             }
@@ -33,6 +33,12 @@ class HomeViewModel @Inject constructor(
     }
 
     override fun onEvent(event: HomeEvent) {
-        TODO("Not yet implemented")
+        when(event) {
+            is HomeEvent.Search -> onSearchEvent(event = event)
+        }
+    }
+
+    private fun onSearchEvent(event: HomeEvent.Search) {
+
     }
 }

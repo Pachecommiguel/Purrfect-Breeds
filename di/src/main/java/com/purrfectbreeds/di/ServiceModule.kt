@@ -1,7 +1,7 @@
 package com.purrfectbreeds.di
 
 import com.purrfectbreeds.remote.RetrofitClient
-import com.purrfectbreeds.remote.service.ImageService
+import com.purrfectbreeds.remote.service.BreedService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -14,5 +14,5 @@ object ServiceModule {
 
     @Singleton
     @Provides
-    fun provideImageService(): ImageService = RetrofitClient.create(classType = ImageService::class.java)
+    fun provideImageService(): BreedService = RetrofitClient.create(classType = BreedService::class.java)
 }

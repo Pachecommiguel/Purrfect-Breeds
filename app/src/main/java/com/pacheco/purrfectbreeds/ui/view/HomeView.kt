@@ -4,7 +4,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -22,20 +25,35 @@ import com.pacheco.purrfectbreeds.ui.event.HomeEvent
 import com.pacheco.purrfectbreeds.ui.res.HomeLabel
 import com.pacheco.purrfectbreeds.ui.viewmodel.BaseViewModel
 import com.pacheco.purrfectbreeds.ui.viewmodel.HomeViewModel
-import com.purrfectbreeds.model.ImageModel
+import com.purrfectbreeds.model.BreedModel
 
 @Composable
 fun HomeView(
-    viewModel: BaseViewModel<HomeEvent, PagingData<ImageModel>> = hiltViewModel<HomeViewModel>(),
+    viewModel: BaseViewModel<HomeEvent, PagingData<BreedModel>> = hiltViewModel<HomeViewModel>(),
 ) {
     val state = viewModel.state.collectAsLazyPagingItems()
-    HomeLayout(state = state)
+    HomeLayout(state = state, onEvent = viewModel::onEvent)
 }
 
 @Composable
-private fun HomeLayout(state: LazyPagingItems<ImageModel>) {
+private fun HomeLayout(
+    state: LazyPagingItems<BreedModel>,
+    onEvent: (HomeEvent) -> Unit
+) {
+    val input = remember { mutableStateOf(String()) }
+
     Column {
         Headline(text = HomeLabel.HEADLINE)
+
+        BasicTextField(
+            value = input.value,
+            onValueChange = {
+                input.value = it
+                onEvent(HomeEvent.Search(name = it))
+            },
+            singleLine = true
+        )
+
         LazyVerticalStaggeredGrid(
             columns = StaggeredGridCells.Fixed(count = 2),
             modifier = Modifier.padding(top = 10.dp)
