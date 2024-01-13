@@ -15,6 +15,7 @@ buildscript {
         paging_version = '3.3.0-alpha02'
         coroutines_version = '1.7.1'
         coil_version = '2.0.0-rc01'
+        room_version = '2.6.1'
     }
 }
 
