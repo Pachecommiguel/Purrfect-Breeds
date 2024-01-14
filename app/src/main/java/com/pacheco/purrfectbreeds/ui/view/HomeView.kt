@@ -1,10 +1,15 @@
 package com.pacheco.purrfectbreeds.ui.view
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
-import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -21,7 +26,9 @@ import coil.compose.AsyncImage
 import com.pacheco.purrfectbreeds.HiltApplication
 import com.pacheco.purrfectbreeds.R
 import com.pacheco.purrfectbreeds.ui.component.Body
+import com.pacheco.purrfectbreeds.ui.component.FavoriteIcon
 import com.pacheco.purrfectbreeds.ui.component.Headline
+import com.pacheco.purrfectbreeds.ui.component.SearchIcon
 import com.pacheco.purrfectbreeds.ui.event.HomeEvent
 import com.pacheco.purrfectbreeds.ui.res.HomeLabel
 import com.pacheco.purrfectbreeds.ui.viewmodel.BaseViewModel
@@ -41,41 +48,71 @@ private fun HomeLayout(
     state: LazyPagingItems<BreedModel>,
     onEvent: (HomeEvent) -> Unit
 ) {
-    val input = remember { mutableStateOf(String()) }
-
     Column {
         Headline(text = HomeLabel.HEADLINE)
+        SearchBar(onEvent = onEvent)
+        BreedsGrid(state = state)
 
-        BasicTextField(
-            value = input.value,
-            onValueChange = {
-                input.value = it
-                onEvent(HomeEvent.Search(name = it))
-            },
-            singleLine = true
-        )
+        if (state.loadState.refresh != LoadState.Loading) {
+            if (state.loadState.refresh is LoadState.Error) {
+                EmptyLayout()
+            }
+            HiltApplication.isLoading = false
+        }
+    }
+}
 
-        LazyVerticalStaggeredGrid(
-            columns = StaggeredGridCells.Fixed(count = 2),
-            modifier = Modifier.padding(top = 10.dp)
-        ) {
-            items(count = state.itemCount) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    AsyncImage(
-                        model = state[it]!!.url,
-                        contentDescription = null,
-                        error = painterResource(id = R.drawable.ic_downloading),
-                        placeholder = painterResource(id = R.drawable.ic_downloading)
-                    )
-                    Body(text = state[it]!!.name, modifier = Modifier.padding(vertical = 5.dp))
-                }
+@Composable
+private fun EmptyLayout() {
+    Body(text = "Empty")
+}
+
+@Composable
+private fun BreedsGrid(state: LazyPagingItems<BreedModel>) {
+    LazyVerticalStaggeredGrid(
+        columns = StaggeredGridCells.Fixed(count = 2),
+        modifier = Modifier.padding(top = 20.dp)
+    ) {
+        items(count = state.itemCount) {
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                AsyncImage(
+                    model = state[it]!!.url,
+                    contentDescription = null,
+                    error = painterResource(id = R.drawable.ic_downloading),
+                    placeholder = painterResource(id = R.drawable.ic_downloading)
+                )
+                Body(text = state[it]!!.name, modifier = Modifier.padding(vertical = 5.dp))
             }
 
-            when(state.loadState.refresh) {
-                LoadState.Loading -> {}
-                is LoadState.Error -> HiltApplication.isLoading = false
-                is LoadState.NotLoading -> HiltApplication.isLoading = false
+            Box(contentAlignment = Alignment.TopEnd) {
+                IconButton(onClick = { /*TODO*/ }) {
+                    FavoriteIcon(isFavorite = state[it]!!.isFavorite)
+                }
             }
         }
     }
+}
+
+@Composable
+private fun SearchBar(onEvent: (HomeEvent) -> Unit) {
+    val input = remember { mutableStateOf(String()) }
+
+    OutlinedTextField(
+        value = input.value,
+        onValueChange = {
+            input.value = it
+            onEvent(HomeEvent.Search(name = it))
+        },
+        textStyle = LocalTextStyle.current.copy(color = MaterialTheme.colorScheme.onSurface),
+        singleLine = true,
+        modifier = Modifier
+            .padding(top = 10.dp)
+            .fillMaxWidth(),
+        leadingIcon = {
+            SearchIcon()
+        },
+        label = {
+            Body(text = "Search")
+        }
+    )
 }
