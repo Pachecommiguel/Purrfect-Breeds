@@ -15,7 +15,7 @@ interface BreedDao {
     fun getAll(): Flow<List<BreedEntity>>
 
     @Query("SELECT * FROM ${CustomRoomDatabase.BREED_TABLE_NAME} WHERE id=:id")
-    suspend fun get(id: String): BreedEntity
+    fun get(id: String): Flow<BreedEntity>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(breed: BreedEntity)

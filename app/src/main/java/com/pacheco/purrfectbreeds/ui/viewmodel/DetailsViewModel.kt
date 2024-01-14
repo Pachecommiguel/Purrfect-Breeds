@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.pacheco.purrfectbreeds.ui.event.DetailsEvent
 import com.pacheco.purrfectbreeds.ui.state.DetailsState
 import com.pacheco.purrfectbreeds.ui.state.StateResult
+import com.purrfectbreeds.usecase.ChangeFavoriteUseCase
 import com.purrfectbreeds.usecase.GetBreedUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,16 +16,17 @@ import javax.inject.Inject
 @HiltViewModel
 class DetailsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    getBreedUseCase: GetBreedUseCase
+    getBreedUseCase: GetBreedUseCase,
+    private val changeFavoriteUseCase: ChangeFavoriteUseCase
 ) : ViewModel(), BaseViewModel<DetailsEvent, StateResult> {
 
     override val stateResult: MutableStateFlow<StateResult> = MutableStateFlow(value = StateResult.Loading)
 
     init {
         viewModelScope.launch {
-            stateResult.value = StateResult.Success(state = DetailsState(breed = getBreedUseCase(
-                id = checkNotNull(savedStateHandle["id"]))
-            ))
+            getBreedUseCase(id = checkNotNull(savedStateHandle["id"])).collect {
+                stateResult.value = StateResult.Success(state = DetailsState(breed = it))
+            }
         }
     }
 
@@ -35,6 +37,8 @@ class DetailsViewModel @Inject constructor(
     }
 
     private fun onChangeFavoriteEvent(event: DetailsEvent.ChangeFavorite) {
-        TODO("Not yet implemented")
+        viewModelScope.launch {
+            changeFavoriteUseCase(id = event.id)
+        }
     }
 }

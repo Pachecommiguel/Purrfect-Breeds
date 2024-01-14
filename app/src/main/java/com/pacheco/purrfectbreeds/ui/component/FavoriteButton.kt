@@ -6,7 +6,7 @@ import androidx.compose.runtime.Composable
 
 @Composable
 fun FavoriteButton(
-    isFavorite: Boolean = true,
+    isFavorite: Boolean,
     isClickable: Boolean = true,
     onClick: () -> Unit
 ) {

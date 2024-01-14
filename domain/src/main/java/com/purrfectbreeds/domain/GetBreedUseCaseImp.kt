@@ -10,5 +10,5 @@ class GetBreedUseCaseImp @Inject constructor(
     private val breedRepository: BreedRepository
 ) : GetBreedUseCase {
 
-    override suspend fun invoke(id: String) = breedRepository.getBreed(id = id)
+    override fun invoke(id: String) = breedRepository.getBreed(id = id)
 }

@@ -1,7 +1,8 @@
 package com.purrfectbreeds.usecase
 
 import com.purrfectbreeds.model.BreedModel
+import kotlinx.coroutines.flow.Flow
 
 interface GetBreedUseCase {
-    suspend operator fun invoke(id: String): BreedModel
+    operator fun invoke(id: String): Flow<BreedModel>
 }

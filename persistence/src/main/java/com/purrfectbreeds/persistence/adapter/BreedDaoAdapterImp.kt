@@ -42,5 +42,7 @@ class BreedDaoAdapterImp @Inject constructor(
         }
     }
 
-    override suspend fun getBreed(id: String) = breedMapper.toModel(entity = breedDao.get(id = id))
+    override fun getBreed(id: String) = breedDao.get(id = id).transform {
+        emit(value = breedMapper.toModel(entity = it))
+    }
 }

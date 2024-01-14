@@ -28,7 +28,7 @@ class BreedRepositoryImp @Inject constructor(
         breedDaoAdapter.changeFavorite(id = id)
     }
 
-    override suspend fun getBreed(id: String) = breedDaoAdapter.getBreed(id = id)
+    override fun getBreed(id: String) = breedDaoAdapter.getBreed(id = id)
 
     override fun getFavorites() = breedDaoAdapter.getFavorites()
 }
