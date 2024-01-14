@@ -9,5 +9,6 @@ data class BreedEntity(
     @PrimaryKey val id: String,
     val url: String,
     val name: String,
-    var isFavorite: Boolean
+    var isFavorite: Boolean,
+    val lifeSpan: String
 )

@@ -8,7 +8,7 @@ import androidx.compose.ui.Modifier
 @Composable
 fun Headline(
     text: String,
-    modifier: Modifier
+    modifier: Modifier = Modifier
 ) {
     Text(text = text, style = MaterialTheme.typography.headlineLarge, modifier = modifier)
 }

@@ -4,13 +4,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import androidx.paging.filter
 import androidx.paging.map
 import com.pacheco.purrfectbreeds.ui.event.HomeEvent
 import com.purrfectbreeds.model.BreedModel
+import com.purrfectbreeds.usecase.ChangeFavoriteUseCase
 import com.purrfectbreeds.usecase.GetBreedsUseCase
 import com.purrfectbreeds.usecase.GetFavoritesUseCase
-import com.purrfectbreeds.usecase.ChangeFavoriteUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -23,22 +22,24 @@ class HomeViewModel @Inject constructor(
     private val changeFavoriteUseCase: ChangeFavoriteUseCase
 ) : ViewModel(), BaseViewModel<HomeEvent, PagingData<BreedModel>> {
 
-    override val state = MutableStateFlow<PagingData<BreedModel>>(value = PagingData.empty())
-    private lateinit var data: PagingData<BreedModel>
+    override val stateResult = MutableStateFlow<PagingData<BreedModel>>(value = PagingData.empty())
+    private var favorites: List<BreedModel>? = null
 
     init {
         viewModelScope.launch {
             getBreedsUseCase().cachedIn(scope = this).collect {
-                data = it
-                state.value = it
+                stateResult.value = it
             }
         }
 
         viewModelScope.launch {
             getFavoritesUseCase().collect { favorites ->
-                state.value = state.value.map { breed ->
-                    breed.copy(isFavorite = favorites?.firstOrNull { it.id == breed.id }?.isFavorite ?: false)
-                }
+                this@HomeViewModel.favorites = favorites
+                stateResult.value = stateResult.value.map { breed -> breed.copy(
+                    isFavorite = this@HomeViewModel.favorites?.firstOrNull {
+                        it.id == breed.id
+                    }?.isFavorite ?: false
+                ) }
             }
         }
     }
@@ -52,7 +53,9 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun onResetSearchEvent() {
-        state.value = data
+        favorites?.let {
+            stateResult.value = PagingData.from(data = it)
+        }
     }
 
     private fun onChangeFavoriteEvent(event: HomeEvent.ChangeFavorite) {
@@ -62,8 +65,10 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun onSearchEvent(event: HomeEvent.Search) {
-        state.value = data.filter {
-            it.name.contains(other = event.name, ignoreCase = true)
+        favorites?.let { favorites ->
+            stateResult.value = PagingData.from(data = favorites.filter {
+                it.name.contains(other = event.name, ignoreCase = true)
+            })
         }
     }
 }

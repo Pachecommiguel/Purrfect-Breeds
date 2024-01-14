@@ -12,7 +12,8 @@ class BreedMapperImp @Inject constructor() : BreedMapper {
         BreedModel(
             id = it.id ?: String(),
             url = it.image?.url ?: String(),
-            name = it.name ?: String()
+            name = it.name ?: String(),
+            lifeSpan = it.lifeSpan?.filter(Char::isDigit)?.take(2) ?: "-"
         )
     }
 }
