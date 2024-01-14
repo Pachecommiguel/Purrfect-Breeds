@@ -47,7 +47,12 @@ class HomeViewModel @Inject constructor(
         when(event) {
             is HomeEvent.Search -> onSearchEvent(event = event)
             is HomeEvent.ChangeFavorite -> onChangeFavoriteEvent(event = event)
+            HomeEvent.ResetSearch -> onResetSearchEvent()
         }
+    }
+
+    private fun onResetSearchEvent() {
+        state.value = data
     }
 
     private fun onChangeFavoriteEvent(event: HomeEvent.ChangeFavorite) {

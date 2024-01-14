@@ -49,7 +49,10 @@ private fun HomeLayout(
     Column {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Headline(text = HomeLabel.HEADLINE, modifier = Modifier.weight(weight = 1f))
-            FavoriteButton(onClick = navigateToFavorites)
+            FavoriteButton(onClick = {
+                navigateToFavorites()
+                onEvent(HomeEvent.ResetSearch)
+            })
         }
         SearchBar(onEvent = onEvent)
         BreedsGrid(state = state, onEvent = onEvent)
