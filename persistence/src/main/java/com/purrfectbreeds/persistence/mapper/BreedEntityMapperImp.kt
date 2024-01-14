@@ -9,10 +9,10 @@ import javax.inject.Singleton
 class BreedEntityMapperImp @Inject constructor() : BreedEntityMapper {
 
     override fun toEntity(model: List<BreedModel>) = model.map {
-        BreedEntity(id = it.id, name = it.name, url = it.url)
+        BreedEntity(id = it.id, name = it.name, url = it.url, isFavorite = it.isFavorite)
     }
 
     override fun toModel(entity: List<BreedEntity>) = entity.map {
-        BreedModel(id = it.id, name = it.name, url = it.url)
-    }.sortedBy(BreedModel::name)
+        BreedModel(id = it.id, name = it.name, url = it.url, isFavorite = it.isFavorite)
+    }
 }

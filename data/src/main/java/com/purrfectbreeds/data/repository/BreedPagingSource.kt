@@ -7,7 +7,6 @@ import com.purrfectbreeds.model.BreedModel
 import com.purrfectbreeds.service.BreedServiceAdapter
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 
 class BreedPagingSource(
     private val breedServiceAdapter: BreedServiceAdapter,
@@ -18,28 +17,38 @@ class BreedPagingSource(
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, BreedModel> {
         val currentPage = params.key ?: 0
-
         return try {
             val breeds = breedServiceAdapter.getBreeds(page = currentPage)
-            coroutineScope {
-                launch {
-                    breedDaoAdapter.addBreeds(breeds = breeds)
-                }
-            }
-            getPageLoadResult(breeds = breeds, currentPage = currentPage)
+            saveBreeds(breeds = breeds)
+            getPageLoadResult(
+                breeds = mergeBreeds(breeds = breeds, favorites = breedDaoAdapter.getFavorites(page = currentPage)),
+                currentPage = currentPage
+            )
         } catch (exception: Exception) {
-            val breeds: List<BreedModel>
-            runBlocking {
-                breeds = breedDaoAdapter.getBreeds(page = currentPage)
-            }
-            when (breeds.isEmpty()) {
-                true -> LoadResult.Error(throwable = exception)
-                false -> getPageLoadResult(breeds = breeds, currentPage = currentPage)
+            getPageLoadResult(
+                breeds = breedDaoAdapter.getBreeds(page = currentPage),
+                currentPage = currentPage
+            )
+        }
+    }
+
+    private fun mergeBreeds(
+        breeds: List<BreedModel>,
+        favorites: List<BreedModel>
+    ) = (favorites + breeds).distinctBy(BreedModel::id).sortedBy(BreedModel::name)
+
+    private suspend fun saveBreeds(breeds: List<BreedModel>) {
+        coroutineScope {
+            launch {
+                breedDaoAdapter.addBreeds(breeds = breeds)
             }
         }
     }
 
-    private fun getPageLoadResult(breeds: List<BreedModel>, currentPage: Int) = LoadResult.Page(
+    private fun getPageLoadResult(
+        breeds: List<BreedModel>,
+        currentPage: Int
+    ) = LoadResult.Page(
         data = breeds,
         prevKey = when(currentPage == 0) {
             true -> null

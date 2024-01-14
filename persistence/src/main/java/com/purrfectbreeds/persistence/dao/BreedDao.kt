@@ -10,6 +10,6 @@ interface BreedDao {
     @Query("SELECT * FROM ${CustomRoomDatabase.BREED_TABLE_NAME} ORDER BY name LIMIT 10 OFFSET :offset")
     suspend fun getAll(offset: Int): List<BreedEntity>
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(breed: BreedEntity)
 }

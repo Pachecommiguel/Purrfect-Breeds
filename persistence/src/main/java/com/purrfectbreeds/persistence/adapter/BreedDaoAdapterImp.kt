@@ -22,4 +22,6 @@ class BreedDaoAdapterImp @Inject constructor(
     override suspend fun getBreeds(page: Int) = breedMapper.toModel(
         entity = breedDao.getAll(offset = page * 10)
     )
+
+    override suspend fun getFavorites(page: Int) = getBreeds(page = page).filter(BreedModel::isFavorite)
 }

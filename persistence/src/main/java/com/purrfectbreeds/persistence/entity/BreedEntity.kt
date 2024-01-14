@@ -8,5 +8,6 @@ import com.purrfectbreeds.persistence.CustomRoomDatabase
 data class BreedEntity(
     @PrimaryKey val id: String,
     val url: String,
-    val name: String
+    val name: String,
+    val isFavorite: Boolean
 )
