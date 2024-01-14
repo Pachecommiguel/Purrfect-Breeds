@@ -6,5 +6,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface BreedRepository {
     suspend fun getAll(): Flow<PagingData<BreedModel>>
-    suspend fun markAsFavorite(id: String)
+    suspend fun changeFavorite(id: String)
+    fun getFavorites(): Flow<List<BreedModel>>
 }

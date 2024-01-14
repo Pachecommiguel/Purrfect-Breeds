@@ -10,6 +10,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.paging.LoadState
 import com.pacheco.purrfectbreeds.router.ApplicationNavHost
 import com.pacheco.purrfectbreeds.ui.theme.PurrfectBreedsTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -20,7 +21,9 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         actionBar?.hide()
-        installSplashScreen().setKeepOnScreenCondition(HiltApplication.Companion::isLoading)
+        installSplashScreen().setKeepOnScreenCondition {
+            HiltApplication.loadState is LoadState.Loading
+        }
         setContent {
             PurrfectBreedsTheme {
                 Surface(modifier = Modifier.fillMaxSize()) {

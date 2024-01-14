@@ -4,5 +4,5 @@ data class BreedModel(
     val id: String,
     val url: String,
     val name: String,
-    val isFavorite: Boolean = false
+    var isFavorite: Boolean = false
 )

@@ -5,6 +5,7 @@ import com.purrfectbreeds.model.BreedModel
 import com.purrfectbreeds.persistence.dao.BreedDao
 import com.purrfectbreeds.persistence.entity.BreedEntity
 import com.purrfectbreeds.persistence.mapper.BreedEntityMapper
+import kotlinx.coroutines.flow.transform
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -30,9 +31,13 @@ class BreedDaoAdapterImp @Inject constructor(
 
     override suspend fun getFavorites(page: Int) = getBreeds(page = page).filter(BreedModel::isFavorite)
 
-    override suspend fun addFavorite(id: String) {
+    override fun getFavorites() = breedDao.getAll().transform {
+        emit(value = breedMapper.toModel(entity = it))
+    }
+
+    override suspend fun changeFavorite(id: String) {
         breeds.firstOrNull { it.id == id }?.let {
-            it.isFavorite = true
+            it.isFavorite = it.isFavorite.not()
             breedDao.update(breed = it)
         }
     }

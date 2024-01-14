@@ -18,7 +18,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
@@ -41,10 +40,7 @@ fun HomeView(
 ) {
     val state = viewModel.state.collectAsLazyPagingItems()
     HomeLayout(state = state, onEvent = viewModel::onEvent)
-    when(state.loadState.refresh) {
-        LoadState.Loading -> {}
-        is LoadState.Error, is LoadState.NotLoading -> HiltApplication.isLoading = false
-    }
+    HiltApplication.loadState = state.loadState.refresh
 }
 
 @Composable
@@ -86,7 +82,7 @@ private fun BreedsGrid(
 
             Box(contentAlignment = Alignment.TopEnd) {
                 IconButton(onClick = {
-                    onEvent(HomeEvent.MarkAsFavorite(id = state[it]!!.id))
+                    onEvent(HomeEvent.ChangeFavorite(id = state[it]!!.id))
                 }) {
                     FavoriteIcon(isFavorite = state[it]!!.isFavorite)
                 }

@@ -1,5 +1,5 @@
 package com.purrfectbreeds.usecase
 
-interface MarkAsFavoriteUseCase {
+interface ChangeFavoriteUseCase {
     suspend operator fun invoke(id: String)
 }
