@@ -8,37 +8,41 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.pacheco.purrfectbreeds.ui.component.Body
 import com.pacheco.purrfectbreeds.ui.component.BreedsGrid
 import com.pacheco.purrfectbreeds.ui.component.Headline
-import com.pacheco.purrfectbreeds.ui.event.FavoritesEvent
 import com.pacheco.purrfectbreeds.ui.res.FavoritesLabel
 import com.pacheco.purrfectbreeds.ui.state.FavoritesState
 import com.pacheco.purrfectbreeds.ui.state.StateResult
-import com.pacheco.purrfectbreeds.ui.viewmodel.BaseViewModel
 import com.pacheco.purrfectbreeds.ui.viewmodel.FavoritesViewModel
+import com.pacheco.purrfectbreeds.ui.viewmodel.StateProvider
 
 @Composable
 fun FavoritesView(
-    viewModel: BaseViewModel<FavoritesEvent, StateResult> = hiltViewModel<FavoritesViewModel>()
+    viewModel: StateProvider<StateResult> = hiltViewModel<FavoritesViewModel>(),
+    navigateToDetails: (String) -> Unit
 ) {
     val stateResult by viewModel.stateResult.collectAsState()
 
     when(stateResult) {
         StateResult.Loading -> {}
         is StateResult.Success -> FavoritesLayout(
-            onEvent = viewModel::onEvent,
-            state = (stateResult as StateResult.Success).state as FavoritesState
+            state = (stateResult as StateResult.Success).state as FavoritesState,
+            navigateToDetails = navigateToDetails
         )
     }
 }
 
 @Composable
 private fun FavoritesLayout(
-    onEvent: (FavoritesEvent) -> Unit,
-    state: FavoritesState
+    state: FavoritesState,
+    navigateToDetails: (String) -> Unit
 ) {
     Column {
         Headline(text = FavoritesLabel.HEADLINE)
-        BreedsGrid(items = state.favorites, isFavoriteClickable = false) {
-            Body(text = String.format(format = FavoritesLabel.LIFE_SPAN, it.lifeSpan))
+        BreedsGrid(
+            items = state.favorites,
+            isFavoriteClickable = false,
+            onClick = navigateToDetails
+        ) {
+            Body(text = String.format(format = FavoritesLabel.LIFE_SPAN, it.lifespan))
         }
     }
 }

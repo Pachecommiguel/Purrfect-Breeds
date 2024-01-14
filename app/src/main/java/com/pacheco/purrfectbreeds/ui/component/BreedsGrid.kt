@@ -1,5 +1,6 @@
 package com.pacheco.purrfectbreeds.ui.component
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -8,11 +9,8 @@ import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
-import coil.compose.AsyncImage
-import com.pacheco.purrfectbreeds.R
 import com.purrfectbreeds.model.BreedModel
 
 @Composable
@@ -21,6 +19,7 @@ fun BreedsGrid(
     items: List<BreedModel> = listOf(),
     isFavoriteClickable: Boolean = true,
     onFavoriteClick: (String) -> Unit = {},
+    onClick: (String) -> Unit,
     content: @Composable (BreedModel) -> Unit = {}
 ) {
     LazyVerticalStaggeredGrid(
@@ -28,12 +27,13 @@ fun BreedsGrid(
         modifier = Modifier.padding(top = 20.dp)
     ) {
         items(count = pagingItems?.itemCount ?: items.size) {
+            val id = pagingItems?.get(it)?.id ?: items[it].id
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                AsyncImage(
-                    model = pagingItems?.get(it)?.url ?: items[it].url,
-                    contentDescription = null,
-                    error = painterResource(id = R.drawable.ic_downloading),
-                    placeholder = painterResource(id = R.drawable.ic_downloading)
+                CatImage(
+                    url = pagingItems?.get(it)?.url ?: items[it].url,
+                    modifier = Modifier.clickable {
+                        onClick(id)
+                    }
                 )
                 Body(
                     text = pagingItems?.get(it)?.name ?: items[it].name,
@@ -47,7 +47,7 @@ fun BreedsGrid(
                     isFavorite = pagingItems?.get(it)?.isFavorite ?: items[it].isFavorite,
                     isClickable = isFavoriteClickable
                 ) {
-                    onFavoriteClick(pagingItems?.get(it)?.id ?: items[it].id)
+                    onFavoriteClick(id)
                 }
             }
         }

@@ -24,10 +24,16 @@ import com.purrfectbreeds.model.BreedModel
 @Composable
 fun HomeView(
     viewModel: BaseViewModel<HomeEvent, PagingData<BreedModel>> = hiltViewModel<HomeViewModel>(),
-    navigateToFavorites: () -> Unit
+    navigateToFavorites: () -> Unit,
+    navigateToDetails: (String) -> Unit
 ) {
     val state = viewModel.stateResult.collectAsLazyPagingItems()
-    HomeLayout(state = state, onEvent = viewModel::onEvent, navigateToFavorites = navigateToFavorites)
+    HomeLayout(
+        state = state,
+        onEvent = viewModel::onEvent,
+        navigateToFavorites = navigateToFavorites,
+        navigateToDetails = navigateToDetails
+    )
     HiltApplication.loadState = state.loadState.refresh
 }
 
@@ -35,7 +41,8 @@ fun HomeView(
 private fun HomeLayout(
     state: LazyPagingItems<BreedModel>,
     onEvent: (HomeEvent) -> Unit,
-    navigateToFavorites: () -> Unit
+    navigateToFavorites: () -> Unit,
+    navigateToDetails: (String) -> Unit
 ) {
     Column {
         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -50,7 +57,8 @@ private fun HomeLayout(
             pagingItems = state,
             onFavoriteClick = {
                 onEvent(HomeEvent.ChangeFavorite(id = it))
-            }
+            },
+            onClick = navigateToDetails
         )
     }
 }

@@ -8,5 +8,6 @@ interface BreedDaoAdapter {
     suspend fun getBreeds(page: Int): List<BreedModel>
     suspend fun getFavorites(page: Int): List<BreedModel>
     suspend fun changeFavorite(id: String)
+    suspend fun getBreed(id: String): BreedModel
     fun getFavorites(): Flow<List<BreedModel>>
 }

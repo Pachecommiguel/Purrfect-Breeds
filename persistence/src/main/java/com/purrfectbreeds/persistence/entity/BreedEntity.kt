@@ -10,5 +10,8 @@ data class BreedEntity(
     val url: String,
     val name: String,
     var isFavorite: Boolean,
-    val lifeSpan: String
+    val lifeSpan: String,
+    val origin: String,
+    val temperament: String,
+    val description: String
 )

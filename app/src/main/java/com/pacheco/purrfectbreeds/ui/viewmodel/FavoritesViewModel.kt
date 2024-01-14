@@ -2,7 +2,6 @@ package com.pacheco.purrfectbreeds.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.pacheco.purrfectbreeds.ui.event.FavoritesEvent
 import com.pacheco.purrfectbreeds.ui.state.FavoritesState
 import com.pacheco.purrfectbreeds.ui.state.StateResult
 import com.purrfectbreeds.model.BreedModel
@@ -15,7 +14,7 @@ import javax.inject.Inject
 @HiltViewModel
 class FavoritesViewModel @Inject constructor(
     getFavoritesUseCase: GetFavoritesUseCase
-) : ViewModel(), BaseViewModel<FavoritesEvent, StateResult> {
+) : ViewModel(), StateProvider<StateResult> {
 
     override val stateResult: MutableStateFlow<StateResult> = MutableStateFlow(value = StateResult.Loading)
 
@@ -27,9 +26,5 @@ class FavoritesViewModel @Inject constructor(
                 )
             }
         }
-    }
-
-    override fun onEvent(event: FavoritesEvent) {
-
     }
 }

@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 import com.purrfectbreeds.persistence.dao.BreedDao
 import com.purrfectbreeds.persistence.entity.BreedEntity
 
-@Database(entities = [BreedEntity::class], version = 2, exportSchema = false)
+@Database(entities = [BreedEntity::class], version = 1, exportSchema = false)
 abstract class CustomRoomDatabase : RoomDatabase() {
 
     companion object {

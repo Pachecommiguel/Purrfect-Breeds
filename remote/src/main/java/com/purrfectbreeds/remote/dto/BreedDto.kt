@@ -9,5 +9,5 @@ data class BreedDto(
     val origin: String? = null,
     val description: String? = null,
     val image: ImageDto? = null,
-    @SerializedName("life_span") val lifeSpan: String? = null
+    @SerializedName("life_span") val lifespan: String? = null
 )

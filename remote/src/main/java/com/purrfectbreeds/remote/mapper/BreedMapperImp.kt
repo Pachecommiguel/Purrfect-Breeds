@@ -9,11 +9,15 @@ import javax.inject.Singleton
 class BreedMapperImp @Inject constructor() : BreedMapper {
 
     override fun toModel(dto: List<BreedDto>) = dto.map {
+        val lifespan = it.lifespan?.filter(Char::isDigit)
         BreedModel(
             id = it.id ?: String(),
             url = it.image?.url ?: String(),
             name = it.name ?: String(),
-            lifeSpan = it.lifeSpan?.filter(Char::isDigit)?.take(2) ?: "-"
+            lifespan = lifespan?.take(lifespan.length / 2) ?: "-",
+            temperament = it.temperament ?: "-",
+            origin = it.origin ?: "-",
+            description = it.description ?: "-"
         )
     }
 }

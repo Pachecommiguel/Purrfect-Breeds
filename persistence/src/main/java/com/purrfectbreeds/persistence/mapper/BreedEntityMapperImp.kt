@@ -14,17 +14,23 @@ class BreedEntityMapperImp @Inject constructor() : BreedEntityMapper {
             name = it.name,
             url = it.url,
             isFavorite = it.isFavorite,
-            lifeSpan = it.lifeSpan
+            lifeSpan = it.lifespan,
+            origin = it.origin,
+            temperament = it.temperament,
+            description = it.description
         )
     }
 
-    override fun toModel(entity: List<BreedEntity>) = entity.map {
-        BreedModel(
-            id = it.id,
-            name = it.name,
-            url = it.url,
-            isFavorite = it.isFavorite,
-            lifeSpan = it.lifeSpan
-        )
-    }
+    override fun toModel(entity: List<BreedEntity>): List<BreedModel> = entity.map(::toModel)
+
+    override fun toModel(entity: BreedEntity) = BreedModel(
+        id = entity.id,
+        name = entity.name,
+        url = entity.url,
+        isFavorite = entity.isFavorite,
+        lifespan = entity.lifeSpan,
+        origin = entity.origin,
+        temperament = entity.temperament,
+        description = entity.description
+    )
 }
