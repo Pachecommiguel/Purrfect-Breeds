@@ -41,6 +41,10 @@ fun HomeView(
 ) {
     val state = viewModel.state.collectAsLazyPagingItems()
     HomeLayout(state = state, onEvent = viewModel::onEvent)
+    when(state.loadState.refresh) {
+        LoadState.Loading -> {}
+        is LoadState.Error, is LoadState.NotLoading -> HiltApplication.isLoading = false
+    }
 }
 
 @Composable
@@ -51,14 +55,7 @@ private fun HomeLayout(
     Column {
         Headline(text = HomeLabel.HEADLINE)
         SearchBar(onEvent = onEvent)
-        BreedsGrid(state = state)
-
-        if (state.loadState.refresh != LoadState.Loading) {
-            if (state.loadState.refresh is LoadState.Error) {
-                EmptyLayout()
-            }
-            HiltApplication.isLoading = false
-        }
+        BreedsGrid(state = state, onEvent = onEvent)
     }
 }
 
@@ -68,7 +65,10 @@ private fun EmptyLayout() {
 }
 
 @Composable
-private fun BreedsGrid(state: LazyPagingItems<BreedModel>) {
+private fun BreedsGrid(
+    state: LazyPagingItems<BreedModel>,
+    onEvent: (HomeEvent) -> Unit
+) {
     LazyVerticalStaggeredGrid(
         columns = StaggeredGridCells.Fixed(count = 2),
         modifier = Modifier.padding(top = 20.dp)
@@ -85,7 +85,9 @@ private fun BreedsGrid(state: LazyPagingItems<BreedModel>) {
             }
 
             Box(contentAlignment = Alignment.TopEnd) {
-                IconButton(onClick = { /*TODO*/ }) {
+                IconButton(onClick = {
+                    onEvent(HomeEvent.MarkAsFavorite(id = state[it]!!.id))
+                }) {
                     FavoriteIcon(isFavorite = state[it]!!.isFavorite)
                 }
             }

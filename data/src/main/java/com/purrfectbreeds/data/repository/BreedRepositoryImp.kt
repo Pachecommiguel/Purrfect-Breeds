@@ -23,4 +23,8 @@ class BreedRepositoryImp @Inject constructor(
             )
         }
     ).flow
+
+    override suspend fun markAsFavorite(id: String) {
+        breedDaoAdapter.addFavorite(id = id)
+    }
 }

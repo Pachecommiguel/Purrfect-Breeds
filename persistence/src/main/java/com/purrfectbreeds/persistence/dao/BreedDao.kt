@@ -4,6 +4,7 @@ import androidx.room.*
 import com.purrfectbreeds.persistence.CustomRoomDatabase
 import com.purrfectbreeds.persistence.entity.BreedEntity
 
+
 @Dao
 interface BreedDao {
 
@@ -12,4 +13,7 @@ interface BreedDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(breed: BreedEntity)
+
+    @Update
+    suspend fun update(breed: BreedEntity)
 }
