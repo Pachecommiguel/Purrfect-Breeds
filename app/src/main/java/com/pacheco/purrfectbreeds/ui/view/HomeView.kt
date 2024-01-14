@@ -1,12 +1,8 @@
 package com.pacheco.purrfectbreeds.ui.view
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -25,7 +21,7 @@ import coil.compose.AsyncImage
 import com.pacheco.purrfectbreeds.HiltApplication
 import com.pacheco.purrfectbreeds.R
 import com.pacheco.purrfectbreeds.ui.component.Body
-import com.pacheco.purrfectbreeds.ui.component.FavoriteIcon
+import com.pacheco.purrfectbreeds.ui.component.FavoriteButton
 import com.pacheco.purrfectbreeds.ui.component.Headline
 import com.pacheco.purrfectbreeds.ui.component.SearchIcon
 import com.pacheco.purrfectbreeds.ui.event.HomeEvent
@@ -37,27 +33,27 @@ import com.purrfectbreeds.model.BreedModel
 @Composable
 fun HomeView(
     viewModel: BaseViewModel<HomeEvent, PagingData<BreedModel>> = hiltViewModel<HomeViewModel>(),
+    navigateToFavorites: () -> Unit
 ) {
     val state = viewModel.state.collectAsLazyPagingItems()
-    HomeLayout(state = state, onEvent = viewModel::onEvent)
+    HomeLayout(state = state, onEvent = viewModel::onEvent, navigateToFavorites = navigateToFavorites)
     HiltApplication.loadState = state.loadState.refresh
 }
 
 @Composable
 private fun HomeLayout(
     state: LazyPagingItems<BreedModel>,
-    onEvent: (HomeEvent) -> Unit
+    onEvent: (HomeEvent) -> Unit,
+    navigateToFavorites: () -> Unit
 ) {
     Column {
-        Headline(text = HomeLabel.HEADLINE)
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Headline(text = HomeLabel.HEADLINE, modifier = Modifier.weight(weight = 1f))
+            FavoriteButton(onClick = navigateToFavorites)
+        }
         SearchBar(onEvent = onEvent)
         BreedsGrid(state = state, onEvent = onEvent)
     }
-}
-
-@Composable
-private fun EmptyLayout() {
-    Body(text = "Empty")
 }
 
 @Composable
@@ -81,10 +77,8 @@ private fun BreedsGrid(
             }
 
             Box(contentAlignment = Alignment.TopEnd) {
-                IconButton(onClick = {
+                FavoriteButton(isFavorite = state[it]!!.isFavorite) {
                     onEvent(HomeEvent.ChangeFavorite(id = state[it]!!.id))
-                }) {
-                    FavoriteIcon(isFavorite = state[it]!!.isFavorite)
                 }
             }
         }
@@ -103,14 +97,12 @@ private fun SearchBar(onEvent: (HomeEvent) -> Unit) {
         },
         textStyle = LocalTextStyle.current.copy(color = MaterialTheme.colorScheme.onSurface),
         singleLine = true,
-        modifier = Modifier
-            .padding(top = 10.dp)
-            .fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth(),
         leadingIcon = {
             SearchIcon()
         },
         label = {
-            Body(text = "Search")
+            Body(text = HomeLabel.SEARCH_BAR_HINT)
         }
     )
 }
