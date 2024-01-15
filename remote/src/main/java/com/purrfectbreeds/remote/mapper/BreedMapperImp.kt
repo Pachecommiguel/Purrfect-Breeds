@@ -8,9 +8,9 @@ import javax.inject.Singleton
 @Singleton
 class BreedMapperImp @Inject constructor() : BreedMapper {
 
-    override fun toModel(dto: List<BreedDto>) = dto
-        .filter { it.id.isNullOrBlank().not() && it.name.isNullOrBlank().not() }
-        .map {
+    override fun toModel(dto: List<BreedDto>?) = dto
+        ?.filter { it.id.isNullOrBlank().not() && it.name.isNullOrBlank().not() }
+        ?.map {
             val lifespan = it.lifespan?.filter(Char::isDigit)
             BreedModel(
                 id = it.id!!,
@@ -21,5 +21,5 @@ class BreedMapperImp @Inject constructor() : BreedMapper {
                 origin = it.origin,
                 description = it.description
             )
-        }
+        } ?: listOf()
 }

@@ -15,5 +15,5 @@ interface BreedService {
         @Query("page") page: Int,
         @Query("order") order: String = "ASC",
         @Query("limit") limit: Int = 10,
-    ): List<BreedDto>
+    ): List<BreedDto>?
 }
