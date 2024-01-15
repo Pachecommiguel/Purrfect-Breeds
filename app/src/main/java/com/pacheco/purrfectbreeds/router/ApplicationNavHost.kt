@@ -2,12 +2,14 @@ package com.pacheco.purrfectbreeds.router
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -16,7 +18,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.pacheco.purrfectbreeds.ui.component.Body
 import com.pacheco.purrfectbreeds.ui.view.BreedsView
 import com.pacheco.purrfectbreeds.ui.view.DetailsView
 import com.pacheco.purrfectbreeds.ui.view.FavoritesView
@@ -32,7 +33,7 @@ fun ApplicationNavHost(navController: NavHostController = rememberNavController(
     Scaffold(
         bottomBar = {
             if (isVisible.value) {
-                getNavigationBar(navController = navController)
+                setNavigationBar(navController = navController)
             }
         }
     ) {
@@ -63,32 +64,40 @@ fun ApplicationNavHost(navController: NavHostController = rememberNavController(
 }
 
 @Composable
-private fun getNavigationBar(navController: NavHostController) = NavigationBar {
-    val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentDestination = navBackStackEntry?.destination
+private fun setNavigationBar(navController: NavHostController) {
+    NavigationBar(containerColor = MaterialTheme.colorScheme.primary, tonalElevation = 0.dp) {
+        val navBackStackEntry by navController.currentBackStackEntryAsState()
+        val currentDestination = navBackStackEntry?.destination
 
-    listOf(Screen.Breeds, Screen.Favorites).forEach { screen ->
-        NavigationBarItem(
-            icon = {
-                Icon(
-                    imageVector = screen.icon,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.primary
-                )
-            },
-            label = {
-                Body(text = screen.title)
-            },
-            selected = currentDestination?.hierarchy?.any { it.route == screen.destination.route } == true,
-            onClick = {
-                navController.navigate(route = screen.destination.route) {
-                    popUpTo(id = navController.graph.findStartDestination().id) {
-                        saveState = true
+        listOf(Screen.Breeds, Screen.Favorites).forEach { screen ->
+            NavigationBarItem(
+                icon = {
+                    Icon(
+                        imageVector = screen.icon,
+                        contentDescription = null,
+                        modifier = Modifier.size(size = 40.dp)
+                    )
+                },
+                colors = NavigationBarItemColors(
+                    selectedIndicatorColor = Color.Transparent,
+                    selectedIconColor = MaterialTheme.colorScheme.background,
+                    unselectedIconColor = MaterialTheme.colorScheme.surfaceBright,
+                    selectedTextColor = Color.Transparent,
+                    unselectedTextColor = Color.Transparent,
+                    disabledIconColor = Color.Transparent,
+                    disabledTextColor = Color.Transparent
+                ),
+                selected = currentDestination?.hierarchy?.any { it.route == screen.destination.route } == true,
+                onClick = {
+                    navController.navigate(route = screen.destination.route) {
+                        popUpTo(id = navController.graph.findStartDestination().id) {
+                            saveState = true
+                        }
+                        launchSingleTop = true
+                        restoreState = true
                     }
-                    launchSingleTop = true
-                    restoreState = true
                 }
-            }
-        )
+            )
+        }
     }
 }

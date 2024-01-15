@@ -7,18 +7,15 @@ import androidx.compose.ui.graphics.vector.ImageVector
 
 sealed class Screen(
     val destination: Destination,
-    val icon: ImageVector,
-    var title: String
+    val icon: ImageVector
 ) {
     object Breeds : Screen(
         destination = Destination.Breeds(),
-        icon = Icons.Filled.Home,
-        title = ScreenLabel.BREEDS
+        icon = Icons.Filled.Home
     )
 
     object Favorites : Screen(
         destination = Destination.Favorites(),
-        icon = Icons.Filled.Star,
-        title = ScreenLabel.FAVORITES
+        icon = Icons.Filled.Star
     )
 }
