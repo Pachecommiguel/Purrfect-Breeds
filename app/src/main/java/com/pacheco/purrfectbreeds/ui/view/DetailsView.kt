@@ -61,7 +61,7 @@ private fun DetailsLayout(
             Row(modifier = Modifier.padding(top = 10.dp)) {
                 Column(modifier = Modifier.weight(weight = 1f)) {
                     Title(text = DetailsLabel.ORIGIN)
-                    Body(text = state.breed.origin)
+                    Body(text = state.breed.origin ?: DetailsLabel.UNKNOWN)
                 }
 
                 FavoriteButton(isFavorite = state.breed.isFavorite) {
@@ -70,10 +70,10 @@ private fun DetailsLayout(
             }
 
             Title(text = DetailsLabel.TEMPERAMENT, modifier = Modifier.padding(top = 10.dp))
-            Body(text = state.breed.temperament)
+            Body(text = state.breed.temperament ?: DetailsLabel.UNKNOWN)
 
             Title(text = DetailsLabel.DESCRIPTION, modifier = Modifier.padding(top = 10.dp))
-            Body(text = state.breed.description)
+            Body(text = state.breed.description ?: DetailsLabel.UNKNOWN)
         }
     }
 }

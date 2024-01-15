@@ -51,7 +51,9 @@ private fun FavoritesLayout(
             onClick = navigateToDetails
         ) {
             Info(
-                text = String.format(format = FavoritesLabel.LIFE_SPAN, it.lifespan),
+                text = it.lifespan?.let { lifespan ->
+                    String.format(format = FavoritesLabel.LIFE_SPAN, lifespan)
+                } ?: FavoritesLabel.LIFE_SPAN_UNKNOWN,
                 modifier = Modifier
                     .background(color = MaterialTheme.colorScheme.surfaceBright)
                     .fillMaxWidth()

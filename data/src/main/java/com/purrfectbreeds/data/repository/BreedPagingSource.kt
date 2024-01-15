@@ -26,7 +26,7 @@ class BreedPagingSource(
             )
         } catch (exception: Exception) {
             val breeds = breedDaoAdapter.getBreeds(page = currentPage)
-            when(breeds.isEmpty()) {
+            when(breeds.isEmpty() && currentPage == 0) {
                 true -> LoadResult.Error(throwable = exception)
                 false -> getPageLoadResult(breeds = breeds, currentPage = currentPage)
             }
