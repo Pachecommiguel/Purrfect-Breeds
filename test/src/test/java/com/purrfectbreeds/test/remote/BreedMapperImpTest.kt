@@ -47,6 +47,7 @@ class BreedMapperImpTest {
 
         val result = breedMapper.toModel(dto = list)
         assertEquals(1, result.size)
+        assertEquals(TEST_STRING, result.first().id)
     }
 
     @Test
@@ -58,6 +59,7 @@ class BreedMapperImpTest {
 
         val result = breedMapper.toModel(dto = list)
         assertEquals(1, result.size)
+        assertEquals(TEST_STRING, result.first().id)
     }
 
     @Test
@@ -71,6 +73,8 @@ class BreedMapperImpTest {
 
         val result = breedMapper.toModel(dto = list)
         assertEquals(1, result.size)
+        assertEquals(TEST_STRING, result.first().id)
+        assertEquals(TEST_STRING, result.first().name)
     }
 
     @Test

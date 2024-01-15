@@ -6,12 +6,12 @@ import com.purrfectbreeds.persistence.CustomRoomDatabase
 
 @Entity(tableName = CustomRoomDatabase.BREED_TABLE_NAME)
 data class BreedEntity(
-    @PrimaryKey val id: String,
-    val url: String,
-    val name: String,
-    var isFavorite: Boolean,
-    val lifeSpan: String?,
-    val origin: String?,
-    val temperament: String?,
-    val description: String?
+    @PrimaryKey val id: String = String(),
+    val url: String = String(),
+    val name: String = String(),
+    var isFavorite: Boolean = false,
+    val lifeSpan: String? = null,
+    val origin: String? = null,
+    val temperament: String? = null,
+    val description: String? = null
 )
