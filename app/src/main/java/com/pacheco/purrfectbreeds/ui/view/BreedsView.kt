@@ -10,8 +10,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
@@ -30,10 +28,6 @@ fun BreedsView(
     navigateToDetails: (String) -> Unit
 ) {
     val state = viewModel.stateResult.collectAsLazyPagingItems()
-
-    LifecycleEventEffect(Lifecycle.Event.ON_RESUME) {
-        viewModel.onEvent(event = BreedsEvent.Refresh)
-    }
 
     when(state.loadState.refresh) {
         LoadState.Loading -> {}
