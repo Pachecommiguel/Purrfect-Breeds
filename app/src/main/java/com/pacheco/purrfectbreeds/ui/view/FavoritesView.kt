@@ -7,6 +7,7 @@ import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.pacheco.purrfectbreeds.ui.component.Body
 import com.pacheco.purrfectbreeds.ui.component.BreedsGrid
+import com.pacheco.purrfectbreeds.ui.component.EmptyLayout
 import com.pacheco.purrfectbreeds.ui.component.Headline
 import com.pacheco.purrfectbreeds.ui.res.FavoritesLabel
 import com.pacheco.purrfectbreeds.ui.state.FavoritesState
@@ -23,6 +24,7 @@ fun FavoritesView(
 
     when(stateResult) {
         StateResult.Loading -> {}
+        StateResult.Error -> EmptyLayout(headline = FavoritesLabel.HEADLINE, body = FavoritesLabel.EMPTY_BODY)
         is StateResult.Success -> FavoritesLayout(
             state = (stateResult as StateResult.Success).state as FavoritesState,
             navigateToDetails = navigateToDetails

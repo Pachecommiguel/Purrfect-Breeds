@@ -21,9 +21,11 @@ class FavoritesViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             getFavoritesUseCase().collect {
-                stateResult.value = StateResult.Success(state = FavoritesState(
-                    favorites = it.filter(BreedModel::isFavorite))
-                )
+                val favorites = it.filter(BreedModel::isFavorite)
+                stateResult.value = when (favorites.isEmpty()) {
+                    true -> StateResult.Error
+                    false -> StateResult.Success(state = FavoritesState(favorites = favorites))
+                }
             }
         }
     }

@@ -29,7 +29,7 @@ fun DetailsView(
     val stateResult by viewModel.stateResult.collectAsState()
 
     when(stateResult) {
-        StateResult.Loading -> {}
+        StateResult.Loading, StateResult.Error -> {}
         is StateResult.Success -> DetailsLayout(
             onEvent = viewModel::onEvent,
             state = (stateResult as StateResult.Success).state as DetailsState
