@@ -18,8 +18,11 @@ class BreedDaoAdapterImp @Inject constructor(
     private var breeds = mutableListOf<BreedEntity>()
 
     override suspend fun addBreeds(breeds: List<BreedModel>) {
-        breedMapper.toEntity(model = breeds).forEach {
-            breedDao.insert(breed = it)
+        breedMapper.toEntity(model = breeds).forEach { breed ->
+            this.breeds.firstOrNull { it.id == breed.id }?.let {
+                breed.isFavorite = it.isFavorite
+                breedDao.update(breed = breed)
+            } ?: breedDao.insert(breed = breed)
         }
     }
 
