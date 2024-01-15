@@ -9,8 +9,8 @@
         android:name=".HiltApplication"
         android:label="Purrfect Breeds"
         android:theme="@style/Theme.AppSplash"
-        tools:targetApi="34"
-        tools:ignore="MissingApplicationIcon">
+        android:icon="@mipmap/ic_launcher_round"
+        tools:targetApi="34">
 
         <activity
             android:name=".MainActivity"

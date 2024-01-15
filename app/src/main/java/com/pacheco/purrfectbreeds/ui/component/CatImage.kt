@@ -14,7 +14,7 @@ fun CatImage(
     AsyncImage(
         model = url,
         contentDescription = null,
-        error = painterResource(id = R.drawable.ic_downloading),
+        error = painterResource(id = R.drawable.no_cat),
         placeholder = painterResource(id = R.drawable.ic_downloading),
         modifier = modifier
     )
