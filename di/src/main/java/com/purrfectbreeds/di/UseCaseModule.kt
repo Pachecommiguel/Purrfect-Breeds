@@ -1,13 +1,7 @@
 package com.purrfectbreeds.di
 
-import com.purrfectbreeds.domain.GetBreedsUseCaseImp
-import com.purrfectbreeds.domain.GetFavoritesUseCaseImp
-import com.purrfectbreeds.domain.ChangeFavoriteUseCaseImp
-import com.purrfectbreeds.domain.GetBreedUseCaseImp
-import com.purrfectbreeds.usecase.GetBreedsUseCase
-import com.purrfectbreeds.usecase.GetFavoritesUseCase
-import com.purrfectbreeds.usecase.ChangeFavoriteUseCase
-import com.purrfectbreeds.usecase.GetBreedUseCase
+import com.purrfectbreeds.domain.*
+import com.purrfectbreeds.usecase.*
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -29,6 +23,10 @@ abstract class UseCaseModule {
     @Singleton
     @Binds
     abstract fun bindChangeFavoriteUseCase(useCase: ChangeFavoriteUseCaseImp): ChangeFavoriteUseCase
+
+    @Singleton
+    @Binds
+    abstract fun bindGetOfflineBreedsUseCase(useCase: GetOfflineBreedsUseCaseImp): GetOfflineBreedsUseCase
 
     @Singleton
     @Binds

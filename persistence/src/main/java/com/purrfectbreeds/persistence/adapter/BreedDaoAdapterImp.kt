@@ -29,9 +29,9 @@ class BreedDaoAdapterImp @Inject constructor(
         return breedMapper.toModel(entity = breeds)
     }
 
-    override suspend fun getFavorites(page: Int) = getBreeds(page = page).filter(BreedModel::isFavorite)
+    override suspend fun getAll(page: Int) = getBreeds(page = page).filter(BreedModel::isFavorite)
 
-    override fun getFavorites() = breedDao.getAll().transform {
+    override fun getAll() = breedDao.getAll().transform {
         emit(value = breedMapper.toModel(entity = it))
     }
 
@@ -43,6 +43,10 @@ class BreedDaoAdapterImp @Inject constructor(
     }
 
     override fun getBreed(id: String) = breedDao.get(id = id).transform {
+        emit(value = breedMapper.toModel(entity = it))
+    }
+
+    override fun getFavorites() = breedDao.getFavorites().transform {
         emit(value = breedMapper.toModel(entity = it))
     }
 }

@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.pacheco.purrfectbreeds.ui.state.FavoritesState
 import com.pacheco.purrfectbreeds.ui.state.StateResult
-import com.purrfectbreeds.model.BreedModel
 import com.purrfectbreeds.usecase.GetFavoritesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -21,10 +20,9 @@ class FavoritesViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             getFavoritesUseCase().collect {
-                val favorites = it.filter(BreedModel::isFavorite)
-                stateResult.value = when (favorites.isEmpty()) {
+                stateResult.value = when (it.isEmpty()) {
                     true -> StateResult.Error
-                    false -> StateResult.Success(state = FavoritesState(favorites = favorites))
+                    false -> StateResult.Success(state = FavoritesState(favorites = it))
                 }
             }
         }

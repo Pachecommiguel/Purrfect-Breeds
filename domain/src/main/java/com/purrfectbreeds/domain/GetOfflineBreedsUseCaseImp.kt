@@ -1,14 +1,14 @@
 package com.purrfectbreeds.domain
 
 import com.purrfectbreeds.repository.BreedRepository
-import com.purrfectbreeds.usecase.GetBreedsUseCase
+import com.purrfectbreeds.usecase.GetOfflineBreedsUseCase
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class GetBreedsUseCaseImp @Inject constructor(
+class GetOfflineBreedsUseCaseImp @Inject constructor(
     private val breedRepository: BreedRepository
-) : GetBreedsUseCase {
+) : GetOfflineBreedsUseCase {
 
-    override suspend fun invoke() = breedRepository.getAllAsPaging()
+    override fun invoke() = breedRepository.getAll()
 }

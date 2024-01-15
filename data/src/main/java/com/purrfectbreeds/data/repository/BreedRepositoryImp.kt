@@ -14,7 +14,7 @@ class BreedRepositoryImp @Inject constructor(
     private val breedDaoAdapter: BreedDaoAdapter
 ) : BreedRepository {
 
-    override suspend fun getAll() = Pager(
+    override suspend fun getAllAsPaging() = Pager(
         config = PagingConfig(pageSize = 20, prefetchDistance = 10),
         pagingSourceFactory = {
             BreedPagingSource(
@@ -29,6 +29,8 @@ class BreedRepositoryImp @Inject constructor(
     }
 
     override fun getBreed(id: String) = breedDaoAdapter.getBreed(id = id)
+
+    override fun getAll() = breedDaoAdapter.getAll()
 
     override fun getFavorites() = breedDaoAdapter.getFavorites()
 }

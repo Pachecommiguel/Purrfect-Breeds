@@ -21,7 +21,7 @@ class BreedPagingSource(
             val breeds = breedServiceAdapter.getBreeds(page = currentPage)
             saveBreeds(breeds = breeds)
             getPageLoadResult(
-                breeds = mergeBreeds(breeds = breeds, favorites = breedDaoAdapter.getFavorites(page = currentPage)),
+                breeds = mergeBreeds(breeds = breeds, favorites = breedDaoAdapter.getAll(page = currentPage)),
                 currentPage = currentPage
             )
         } catch (exception: Exception) {

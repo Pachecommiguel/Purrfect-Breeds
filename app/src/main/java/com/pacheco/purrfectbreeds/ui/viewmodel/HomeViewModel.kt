@@ -10,7 +10,7 @@ import com.pacheco.purrfectbreeds.ui.event.HomeEvent
 import com.purrfectbreeds.model.BreedModel
 import com.purrfectbreeds.usecase.ChangeFavoriteUseCase
 import com.purrfectbreeds.usecase.GetBreedsUseCase
-import com.purrfectbreeds.usecase.GetFavoritesUseCase
+import com.purrfectbreeds.usecase.GetOfflineBreedsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -19,7 +19,7 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     getBreedsUseCase: GetBreedsUseCase,
-    getFavoritesUseCase: GetFavoritesUseCase,
+    getOfflineBreedsUseCase: GetOfflineBreedsUseCase,
     private val changeFavoriteUseCase: ChangeFavoriteUseCase
 ) : ViewModel(), BaseViewModel<HomeEvent, PagingData<BreedModel>> {
 
@@ -35,7 +35,7 @@ class HomeViewModel @Inject constructor(
         }
 
         viewModelScope.launch {
-            getFavoritesUseCase().collect { favorites ->
+            getOfflineBreedsUseCase().collect { favorites ->
                 stateResult.value = stateResult.value.map { breed -> breed.copy(
                     isFavorite = favorites?.firstOrNull { it.id == breed.id }?.isFavorite ?: false
                 )}
