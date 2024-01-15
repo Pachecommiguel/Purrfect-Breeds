@@ -1,7 +1,6 @@
 package com.pacheco.purrfectbreeds.ui.view
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
@@ -9,7 +8,6 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.LoadState
@@ -18,16 +16,15 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.pacheco.purrfectbreeds.HiltApplication
 import com.pacheco.purrfectbreeds.ui.component.*
-import com.pacheco.purrfectbreeds.ui.event.HomeEvent
+import com.pacheco.purrfectbreeds.ui.event.BreedsEvent
 import com.pacheco.purrfectbreeds.ui.res.HomeLabel
 import com.pacheco.purrfectbreeds.ui.viewmodel.BaseViewModel
-import com.pacheco.purrfectbreeds.ui.viewmodel.HomeViewModel
+import com.pacheco.purrfectbreeds.ui.viewmodel.BreedsViewModel
 import com.purrfectbreeds.model.BreedModel
 
 @Composable
-fun HomeView(
-    viewModel: BaseViewModel<HomeEvent, PagingData<BreedModel>> = hiltViewModel<HomeViewModel>(),
-    navigateToFavorites: () -> Unit,
+fun BreedsView(
+    viewModel: BaseViewModel<BreedsEvent, PagingData<BreedModel>> = hiltViewModel<BreedsViewModel>(),
     navigateToDetails: (String) -> Unit
 ) {
     val state = viewModel.stateResult.collectAsLazyPagingItems()
@@ -38,7 +35,6 @@ fun HomeView(
         is LoadState.NotLoading -> HomeLayout(
             state = state,
             onEvent = viewModel::onEvent,
-            navigateToFavorites = navigateToFavorites,
             navigateToDetails = navigateToDetails
         )
     }
@@ -49,26 +45,22 @@ fun HomeView(
 @Composable
 private fun HomeLayout(
     state: LazyPagingItems<BreedModel>,
-    onEvent: (HomeEvent) -> Unit,
-    navigateToFavorites: () -> Unit,
+    onEvent: (BreedsEvent) -> Unit,
     navigateToDetails: (String) -> Unit
 ) {
     Column {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Headline(text = HomeLabel.HEADLINE, modifier = Modifier.weight(weight = 1f))
-            FavoriteSingleClickButton(onClick = navigateToFavorites)
-        }
+        Headline(text = HomeLabel.HEADLINE)
         SearchBar(onEvent = onEvent)
         BreedsGrid(
             pagingItems = state,
-            onFavoriteClick = { onEvent(HomeEvent.ChangeFavorite(id = it)) },
+            onFavoriteClick = { onEvent(BreedsEvent.ChangeFavorite(id = it)) },
             onClick = navigateToDetails
         )
     }
 }
 
 @Composable
-private fun SearchBar(onEvent: (HomeEvent) -> Unit) {
+private fun SearchBar(onEvent: (BreedsEvent) -> Unit) {
     val input = remember {
         mutableStateOf(String())
     }
@@ -77,7 +69,7 @@ private fun SearchBar(onEvent: (HomeEvent) -> Unit) {
         value = input.value,
         onValueChange = {
             input.value = it
-            onEvent(HomeEvent.Search(name = it))
+            onEvent(BreedsEvent.Search(name = it))
         },
         textStyle = LocalTextStyle.current.copy(color = MaterialTheme.colorScheme.onSurface),
         singleLine = true,
