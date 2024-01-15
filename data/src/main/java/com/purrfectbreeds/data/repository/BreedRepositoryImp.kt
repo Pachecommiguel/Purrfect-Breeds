@@ -15,7 +15,7 @@ class BreedRepositoryImp @Inject constructor(
 ) : BreedRepository {
 
     override suspend fun getAll() = Pager(
-        config = PagingConfig(pageSize = 20, prefetchDistance = 20),
+        config = PagingConfig(pageSize = 20, prefetchDistance = 10),
         pagingSourceFactory = {
             BreedPagingSource(
                 breedServiceAdapter = breedServiceAdapter,

@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import androidx.paging.filter
 import androidx.paging.map
 import com.pacheco.purrfectbreeds.ui.event.HomeEvent
 import com.purrfectbreeds.model.BreedModel
@@ -23,23 +24,21 @@ class HomeViewModel @Inject constructor(
 ) : ViewModel(), BaseViewModel<HomeEvent, PagingData<BreedModel>> {
 
     override val stateResult = MutableStateFlow<PagingData<BreedModel>>(value = PagingData.empty())
-    private var favorites: List<BreedModel>? = null
+    private lateinit var data: PagingData<BreedModel>
 
     init {
         viewModelScope.launch {
             getBreedsUseCase().cachedIn(scope = this).collect {
+                data = it
                 stateResult.value = it
             }
         }
 
         viewModelScope.launch {
             getFavoritesUseCase().collect { favorites ->
-                this@HomeViewModel.favorites = favorites
                 stateResult.value = stateResult.value.map { breed -> breed.copy(
-                    isFavorite = this@HomeViewModel.favorites?.firstOrNull {
-                        it.id == breed.id
-                    }?.isFavorite ?: false
-                ) }
+                    isFavorite = favorites?.firstOrNull { it.id == breed.id }?.isFavorite ?: false
+                )}
             }
         }
     }
@@ -48,13 +47,6 @@ class HomeViewModel @Inject constructor(
         when(event) {
             is HomeEvent.Search -> onSearchEvent(event = event)
             is HomeEvent.ChangeFavorite -> onChangeFavoriteEvent(event = event)
-            HomeEvent.ResetSearch -> onResetSearchEvent()
-        }
-    }
-
-    private fun onResetSearchEvent() {
-        favorites?.let {
-            stateResult.value = PagingData.from(data = it)
         }
     }
 
@@ -65,10 +57,8 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun onSearchEvent(event: HomeEvent.Search) {
-        favorites?.let { favorites ->
-            stateResult.value = PagingData.from(data = favorites.filter {
-                it.name.contains(other = event.name, ignoreCase = true)
-            })
+        stateResult.value = data.filter {
+            it.name.contains(other = event.name, ignoreCase = true)
         }
     }
 }

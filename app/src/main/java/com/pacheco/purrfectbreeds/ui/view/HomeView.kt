@@ -1,6 +1,8 @@
 package com.pacheco.purrfectbreeds.ui.view
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -10,6 +12,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
@@ -28,12 +31,18 @@ fun HomeView(
     navigateToDetails: (String) -> Unit
 ) {
     val state = viewModel.stateResult.collectAsLazyPagingItems()
-    HomeLayout(
-        state = state,
-        onEvent = viewModel::onEvent,
-        navigateToFavorites = navigateToFavorites,
-        navigateToDetails = navigateToDetails
-    )
+
+    when(state.loadState.refresh) {
+        LoadState.Loading -> {}
+        is LoadState.Error -> EmptyLayout(headline = HomeLabel.HEADLINE, body = HomeLabel.EMPTY_BODY)
+        is LoadState.NotLoading -> HomeLayout(
+            state = state,
+            onEvent = viewModel::onEvent,
+            navigateToFavorites = navigateToFavorites,
+            navigateToDetails = navigateToDetails
+        )
+    }
+
     HiltApplication.loadState = state.loadState.refresh
 }
 
@@ -47,17 +56,12 @@ private fun HomeLayout(
     Column {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Headline(text = HomeLabel.HEADLINE, modifier = Modifier.weight(weight = 1f))
-            FavoriteSingleClickButton(onClick = {
-                navigateToFavorites()
-                onEvent(HomeEvent.ResetSearch)
-            })
+            FavoriteSingleClickButton(onClick = navigateToFavorites)
         }
         SearchBar(onEvent = onEvent)
         BreedsGrid(
             pagingItems = state,
-            onFavoriteClick = {
-                onEvent(HomeEvent.ChangeFavorite(id = it))
-            },
+            onFavoriteClick = { onEvent(HomeEvent.ChangeFavorite(id = it)) },
             onClick = navigateToDetails
         )
     }
@@ -78,11 +82,7 @@ private fun SearchBar(onEvent: (HomeEvent) -> Unit) {
         textStyle = LocalTextStyle.current.copy(color = MaterialTheme.colorScheme.onSurface),
         singleLine = true,
         modifier = Modifier.fillMaxWidth(),
-        leadingIcon = {
-            SearchIcon()
-        },
-        label = {
-            Body(text = HomeLabel.SEARCH_BAR_HINT)
-        }
+        leadingIcon = { SearchIcon() },
+        label = { Body(text = HomeLabel.SEARCH_BAR_HINT) }
     )
 }

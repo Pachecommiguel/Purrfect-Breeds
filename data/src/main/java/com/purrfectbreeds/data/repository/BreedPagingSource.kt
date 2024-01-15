@@ -25,10 +25,11 @@ class BreedPagingSource(
                 currentPage = currentPage
             )
         } catch (exception: Exception) {
-            getPageLoadResult(
-                breeds = breedDaoAdapter.getBreeds(page = currentPage),
-                currentPage = currentPage
-            )
+            val breeds = breedDaoAdapter.getBreeds(page = currentPage)
+            when(breeds.isEmpty()) {
+                true -> LoadResult.Error(throwable = exception)
+                false -> getPageLoadResult(breeds = breeds, currentPage = currentPage)
+            }
         }
     }
 
@@ -50,13 +51,7 @@ class BreedPagingSource(
         currentPage: Int
     ) = LoadResult.Page(
         data = breeds,
-        prevKey = when(currentPage == 0) {
-            true -> null
-            false -> currentPage.dec()
-        },
-        nextKey = when(breeds.isEmpty()) {
-            true -> null
-            false -> currentPage.inc()
-        }
+        prevKey = if (currentPage == 0) null else currentPage.dec(),
+        nextKey = if (breeds.isEmpty()) null else currentPage.inc()
     )
 }
