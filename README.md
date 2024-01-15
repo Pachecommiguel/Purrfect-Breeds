@@ -1,6 +1,6 @@
-Perfect Breeds is an Android application designed to provide users with information about various cat breeds. 
-The app fetches breed data remotely when an internet connection is available and falls back to a local database if no connection is possible. 
-Users can mark breeds as favorites and access additional information about them.
+# Purrfect Breeds
+
+Purrfect Breeds is an Android application designed to provide users with information about various cat breeds. The app fetches breed data remotely when an internet connection is available and falls back to a local database if no connection is possible. Users can mark breeds as favorites and access additional information about them.
 
 Features
 - Remote Fetching: Retrieve cat breed information from a remote server when an internet connection is available.
