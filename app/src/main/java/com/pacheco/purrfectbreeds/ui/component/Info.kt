@@ -6,9 +6,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 
 @Composable
-fun Headline(
+fun Info(
     text: String,
     modifier: Modifier = Modifier
 ) {
-    Text(text = text, style = MaterialTheme.typography.headlineSmall, modifier = modifier)
+    Text(text = text, style = MaterialTheme.typography.bodyMedium, modifier = modifier)
 }

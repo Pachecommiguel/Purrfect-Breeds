@@ -27,7 +27,7 @@ fun FavoriteButton(
             },
             tint = MaterialTheme.colorScheme.primary,
             contentDescription = null,
-            modifier = Modifier.size(size = 40.dp)
+            modifier = Modifier.size(size = 20.dp)
         )
     }
 }

@@ -27,7 +27,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             PurrfectBreedsTheme {
                 Surface(modifier = Modifier.fillMaxSize()) {
-                    Box(modifier = Modifier.padding(horizontal = 20.dp).padding(top = 20.dp)) {
+                    Box(modifier = Modifier.padding(horizontal = 20.dp).padding(vertical = 20.dp)) {
                         ApplicationNavHost()
                     }
                 }

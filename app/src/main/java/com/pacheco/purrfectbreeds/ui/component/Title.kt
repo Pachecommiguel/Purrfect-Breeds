@@ -10,5 +10,5 @@ fun Title(
     text: String,
     modifier: Modifier = Modifier
 ) {
-    Text(text = text, style = MaterialTheme.typography.titleLarge, modifier = modifier)
+    Text(text = text, style = MaterialTheme.typography.titleMedium, modifier = modifier)
 }

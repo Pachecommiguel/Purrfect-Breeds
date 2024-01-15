@@ -28,7 +28,7 @@ fun FavoriteSingleClickButton(onClick: () -> Unit) {
             imageVector = Icons.Filled.Star,
             contentDescription = null,
             tint = MaterialTheme.colorScheme.primary,
-            modifier = Modifier.size(size = 40.dp)
+            modifier = Modifier.size(size = 30.dp)
         )
     }
 }
