@@ -47,7 +47,12 @@ class BreedsViewModel @Inject constructor(
         when(event) {
             is BreedsEvent.Search -> onSearchEvent(event = event)
             is BreedsEvent.ChangeFavorite -> onChangeFavoriteEvent(event = event)
+            BreedsEvent.Refresh -> onRefreshEvent()
         }
+    }
+
+    private fun onRefreshEvent() {
+        stateResult.value = data
     }
 
     private fun onChangeFavoriteEvent(event: BreedsEvent.ChangeFavorite) {

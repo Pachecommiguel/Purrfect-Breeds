@@ -18,6 +18,7 @@ buildscript {
         room_version = '2.6.1'
         junit_version = '5.10.1'
         mockito_version = '5.9.0'
+        lifecycle_compose_version = '2.7.0'
     }
 }
 
